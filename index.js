@@ -3,13 +3,14 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-13T16:40:02+08:00
+* @Last modified time: 2016-03-13T18:38:15+08:00
 * @License: The MIT License (MIT)
 */
 
 
 const ldap = require('ldapjs');
 const rp = require('request-promise');
+const errors = require('request-promise/errors');
 const co = require('co');
 
 const config = require('./config');
@@ -18,14 +19,14 @@ const config = require('./config');
 const server = ldap.createServer();
 const headers = {
   authorization: `oauth ${config.cas.secret}`,
-}
+};
 
 server.on('close', (err) => {
   console.log('ldap server closed');
 });
 
 // admin password bind
-server.bind(`cn=${config.ldap.admin.username},${config.ldap.base}`, (req, res, next) => {
+server.bind(config.dn.admin, (req, res, next) => {
   if (req.version !== 3) {
     return next(new ldap.ProtocolError(`${req.version} is not v3`));
   }
@@ -36,7 +37,7 @@ server.bind(`cn=${config.ldap.admin.username},${config.ldap.base}`, (req, res, n
 });
 
 // dynamic password bind
-server.bind(`dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`, (req, res, next) => {
+server.bind(config.dn.dynamic, (req, res, next) => {
   try {
     const id = req.dn.toString().split(',')[0].split('=')[1];
   } catch (e) {
@@ -56,17 +57,26 @@ server.bind(`dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`, (r
       json: true,
       headers: headers,
     };
-    const resp = yield rp(options);
+    const resp = yield rp(options).catch(errors.RequestError, (reason) => {
+    });
+    if (!resp) {
+      next(new ldap.UnavailableError());
+      return res.end();
+    }
     if (resp.code !== 0) {
       next(new ldap.InvalidCredentialsError(resp.data.value));
       return res.end();
     }
     return res.end();
   })
+  .catch((err) => {
+    next(new ldap.UnavailableError(err.message));
+    return res.end();
+  })
 });
 
 // static password bind
-server.bind(`dc=${config.ldap.user.username},${config.ldap.base}`, (req, res, next) => {
+server.bind(config.dn.static, (req, res, next) => {
   try {
     const id = req.dn.toString().split(',')[0].split('=')[1];
   } catch (e) {
@@ -85,13 +95,30 @@ server.bind(`dc=${config.ldap.user.username},${config.ldap.base}`, (req, res, ne
       json: true,
       headers: headers,
     };
-    const resp = yield rp(options);
+    const resp = yield rp(options).catch(errors.RequestError, (reason) => {
+    });
+    if (!resp) {
+      next(new ldap.UnavailableError());
+      return res.end();
+    }
     if (resp.code !== 0) {
       next(new ldap.InvalidCredentialsError(resp.data.value));
       return res.end();
     }
     return res.end();
+  })
+  .catch((err) => {
+    next(new ldap.UnavailableError(err.message));
+    return res.end();
   });
+});
+
+const search = require('./search');
+// search
+server.search(config.dn.static, search.user.static);
+
+server.unbind((req, res, next) => {
+  res.end();
 });
 
 server.listen(config.ldap.port, config.ldap.host, () => {
