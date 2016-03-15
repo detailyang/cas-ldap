@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-13T18:38:42+08:00
+* @Last modified time: 2016-03-15T12:28:49+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -31,7 +31,7 @@ const search = (type) => {
         }
       });
       const options = {
-        url: `${config.cas.domain}${config.cas.api.getUser.endpoint}`,
+        uri: `${config.cas.domain}${config.cas.api.getUser.endpoint}`,
         method: config.cas.api.getUser.method,
         qs: query,
         json: true,

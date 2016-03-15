@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-13T18:38:15+08:00
+* @Last modified time: 2016-03-15T12:28:03+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -51,7 +51,7 @@ server.bind(config.dn.dynamic, (req, res, next) => {
 
   co(function *() {
     const options = {
-      url: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
+      uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
       method: config.cas.api.checkLogin.method,
       body: body,
       json: true,
@@ -89,16 +89,17 @@ server.bind(config.dn.static, (req, res, next) => {
 
   co (function *() {
     const options = {
-      url: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
+      uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
       method: config.cas.api.checkLogin.method,
       body: body,
       json: true,
       headers: headers,
     };
     const resp = yield rp(options).catch(errors.RequestError, (reason) => {
+      console.log(reason);
+      next(new ldap.UnavailableError(reason));
     });
     if (!resp) {
-      next(new ldap.UnavailableError());
       return res.end();
     }
     if (resp.code !== 0) {
