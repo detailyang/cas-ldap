@@ -2,7 +2,7 @@
  * @Author: detailyang
  * @Date:   2015-03-01 20:34:37
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-15T13:07:10+08:00
+* @Last modified time: 2016-03-15T20:07:33+08:00
  */
 
 
@@ -32,6 +32,11 @@ config.syslog = {
   port: process.env.CAS_LDAP_SYSLOG_PORT || '514',
   facility: process.env.CAS_LDAP_SYSLOG_FACILITY || 'local6',
   tag: process.env.CAS_LDAP_SYSLOG_TAG || 'cas-ldap',
+};
+
+config.ssl = {
+  key: process.env.CAS_SSL_KEY || 'ssl/server.key',
+  cert: process.env.CAS_SSL_CERT || 'ssl/server.crt',
 };
 
 if (process.env.NODE_ENV === 'dev') {

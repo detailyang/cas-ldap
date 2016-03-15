@@ -12,7 +12,6 @@
   "author": "detailyang",
   "license": "MIT",
   "dependencies": {
-    "bunyan": "^1.7.1",
     "chai": "^3.5.0",
     "co": "^4.6.0",
     "ldapjs": "^1.0.0",

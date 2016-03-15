@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-15T13:36:08+08:00
+* @Last modified time: 2016-03-15T20:06:24+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -29,8 +29,8 @@ winston.trace = () => {};
 
 const server = ldap.createServer({
   log: winston,
-  certificate: fs.readFileSync('ssl/server.crt'),
-  key: fs.readFileSync('ssl/server.key'),
+  certificate: fs.readFileSync(config.ssl.cert),
+  key: fs.readFileSync(config.ssl.key),
 });
 const headers = {
   authorization: `oauth ${config.cas.secret}`,
