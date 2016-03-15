@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-15T12:28:49+08:00
+* @Last modified time: 2016-03-15T13:37:58+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -21,6 +21,14 @@ const headers = {
 
 const search = (type) => {
   return (req, res, next) => {
+    req.log.info({
+      ip: req.connection.ldap.id,
+      type: `${type} user search`,
+      version: req.version || '-1',
+      dn: req.dn.toString(),
+      filter: req.filter.toString(),
+      scope: req.scope,
+    });
     co(function *() {
       const query = {};
       // maybe support equal only is enough

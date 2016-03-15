@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T15:27:41+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-15T12:32:25+08:00
+* @Last modified time: 2016-03-15T12:53:55+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -15,7 +15,7 @@ const expect = require('chai').expect;
 
 const config = require('./config');
 const client = ldap.createClient({
-  url: `ldap://${config.ldap.host}:${config.ldap.port}`
+  url: `ldaps://${config.ldap.host}:${config.ldap.port}`
 });
 
 describe('ldap admin password bind', function(){
@@ -49,7 +49,6 @@ describe('ldap static password id bind', function(){
 });
 
 describe('ldap dynamic password username bind', function(){
-  console.log(`dc=black,dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`);
   it('should return sucess', function(done){
     client.bind(`dc=black,dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
       '123456', (err) => {
@@ -60,7 +59,6 @@ describe('ldap dynamic password username bind', function(){
 });
 
 describe('ldap dynamic password id bind', function(){
-  console.log(`dc=black,dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`);
   it('should return sucess', function(done){
     client.bind(`dc=1,dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
       '655879', (err) => {

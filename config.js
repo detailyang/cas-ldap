@@ -2,7 +2,7 @@
  * @Author: detailyang
  * @Date:   2015-03-01 20:34:37
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-14T21:58:56+08:00
+* @Last modified time: 2016-03-15T13:07:10+08:00
  */
 
 
@@ -25,6 +25,13 @@ config.cas = {
       endpoint: '/oauth/users/one',
     },
   },
+};
+
+config.syslog = {
+  hostname: process.env.CAS_LDAP_SYSLOG_HOSTNAME || 'localhost',
+  port: process.env.CAS_LDAP_SYSLOG_PORT || '514',
+  facility: process.env.CAS_LDAP_SYSLOG_FACILITY || 'local6',
+  tag: process.env.CAS_LDAP_SYSLOG_TAG || 'cas-ldap',
 };
 
 if (process.env.NODE_ENV === 'dev') {
