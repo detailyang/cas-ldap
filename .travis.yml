@@ -4,5 +4,4 @@ node_js:
 env:
   - NODE_ENV=test
 before_script:
-  - sudo node index.js
   - node mock.js
