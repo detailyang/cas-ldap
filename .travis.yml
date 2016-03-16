@@ -4,5 +4,6 @@ node_js:
 env:
   - NODE_ENV=test
 before_script:
-  - su -m root && node index.js
+  - echo $PATH
+  - which node
   - node mock.js &
