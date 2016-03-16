@@ -2,7 +2,7 @@
  * @Author: detailyang
  * @Date:   2015-03-01 20:34:37
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-15T20:07:33+08:00
+* @Last modified time: 2016-03-16T16:15:22+08:00
  */
 
 
@@ -55,8 +55,20 @@ if (process.env.NODE_ENV === 'dev') {
   config.cas.domain = 'http://127.0.0.1:3000';
   config.cas.secret = 'ebc4a530-e87c-11e5-8fb6-6fd23b62767f';
 } else if (process.env.NODE_ENV === 'test'){
+  config.mock = {
+    username: 'admin',
+    password: 'password',
+    id: '1',
+    gender: 0,
+    realname: 'admin',
+    aliasname: 'admin',
+    mobile: '1234567890',
+    email: 'amdin@example.com',
+    key: '',
+    dynamic: 'abababaaaaa',
+  };
   config.ldap = {
-    port: 389,
+    port: 636,
     host: '127.0.0.1',
     base: 'dc=cas,dc=com',
     admin: {

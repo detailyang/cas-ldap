@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T15:27:41+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-15T12:53:55+08:00
+* @Last modified time: 2016-03-16T16:19:49+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -12,11 +12,12 @@ const should = require('should');
 const ldap = require('ldapjs');
 const expect = require('chai').expect;
 
-
 const config = require('./config');
 const client = ldap.createClient({
   url: `ldaps://${config.ldap.host}:${config.ldap.port}`
 });
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 describe('ldap admin password bind', function(){
   it('should return success', (done) => {
@@ -30,8 +31,8 @@ describe('ldap admin password bind', function(){
 
 describe('ldap static password username bind', function(){
   it('should return sucess', function(done){
-    client.bind(`dc=black,${config.dn.static}`,
-      'password', (err) => {
+    client.bind(`dc=${config.mock.username},${config.dn.static}`,
+      config.mock.password, (err) => {
         expect(err).to.be.null;
         done();
     });
@@ -40,8 +41,8 @@ describe('ldap static password username bind', function(){
 
 describe('ldap static password id bind', function(){
   it('should return sucess', function(done){
-    client.bind(`dc=1,${config.dn.static}`,
-      'password', (err) => {
+    client.bind(`dc=${config.mock.id},${config.dn.static}`,
+      config.mock.password, (err) => {
         expect(err).to.be.null;
         done();
     });
@@ -50,8 +51,8 @@ describe('ldap static password id bind', function(){
 
 describe('ldap dynamic password username bind', function(){
   it('should return sucess', function(done){
-    client.bind(`dc=black,dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
-      '123456', (err) => {
+    client.bind(`dc=${config.mock.username},dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
+      config.mock.dynamic, (err) => {
         expect(err).to.be.null;
         done();
     });
@@ -60,17 +61,18 @@ describe('ldap dynamic password username bind', function(){
 
 describe('ldap dynamic password id bind', function(){
   it('should return sucess', function(done){
-    client.bind(`dc=1,dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
-      '655879', (err) => {
+    client.bind(`dc=${config.mock.id},dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
+      config.mock.dynamic, (err) => {
         expect(err).to.be.null;
         done();
     });
   });
 });
+
 describe('ldap search user', function() {
   it('should return success', function(done) {
     var opts = {
-      filter: '(email=black@qima-inc.com)',
+      filter: `(email=${config.mock.email})`,
       scope: 'sub',
       attributes: ['*']
     };
