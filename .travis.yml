@@ -2,7 +2,7 @@
 # @Date:   2016-03-16T13:58:02+08:00
 # @Email:  detailyang@gmail.com
 # @Last modified by:   detailyang
-# @Last modified time: 2016-03-16T16:21:50+08:00
+# @Last modified time: 2016-03-16T16:38:18+08:00
 # @License: The MIT License (MIT)
 
 
@@ -12,5 +12,5 @@ node_js:
 env:
   - NODE_ENV=test
 before_script:
-  - node index.js
-  - node mock.js
+  - node index.js &
+  - node mock.js &

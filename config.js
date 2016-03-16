@@ -2,7 +2,7 @@
  * @Author: detailyang
  * @Date:   2015-03-01 20:34:37
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-16T16:15:22+08:00
+* @Last modified time: 2016-03-16T16:38:04+08:00
  */
 
 
@@ -68,7 +68,7 @@ if (process.env.NODE_ENV === 'dev') {
     dynamic: 'abababaaaaa',
   };
   config.ldap = {
-    port: 636,
+    port: 1636,
     host: '127.0.0.1',
     base: 'dc=cas,dc=com',
     admin: {
