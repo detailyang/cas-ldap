@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T17:07:49+08:00
+* @Last modified time: 2016-03-17T17:08:24+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -57,7 +57,7 @@ const search = (type) => {
         return res.end();
       }
       const user = resp.data.value;
-      let basedn = config.dn.static;
+      const basedn = config.dn.static;
       if (type == 'static') {
         basedn = config.dn.static;
       } else if (type == 'dynamic') {
