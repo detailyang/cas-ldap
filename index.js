@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T17:44:17+08:00
+* @Last modified time: 2016-03-17T21:09:25+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -124,11 +124,11 @@ createServer = (server) => {
     })
   });
 
-  // static password bind
-  server.bind(config.dn.static, (req, res, next) => {
+  // static dynamic bind
+  server.bind(config.dn.staticdynamic, (req, res, next) => {
     req.log.info({
       ip: req.connection.ldap.id,
-      type: 'static user bind',
+      type: 'static dynamic user bind',
       version: req.version || '-1',
       dn: req.dn.toString(),
     });
@@ -140,7 +140,7 @@ createServer = (server) => {
     const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
     const body = {};
     body[field] = id;
-    body['password'] = req.credentials;
+    body['staticdynamic'] = req.credentials;
 
     co (function *() {
       const options = {
@@ -169,11 +169,11 @@ createServer = (server) => {
     });
   });
 
-  // static dynamic bind
-  server.bind(config.dn.staticdynamic, (req, res, next) => {
+  // static password bind
+  server.bind(config.dn.static, (req, res, next) => {
     req.log.info({
       ip: req.connection.ldap.id,
-      type: 'static dynamic user bind',
+      type: 'static user bind',
       version: req.version || '-1',
       dn: req.dn.toString(),
     });
@@ -185,7 +185,7 @@ createServer = (server) => {
     const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
     const body = {};
     body[field] = id;
-    body['staticdynamic'] = req.credentials;
+    body['password'] = req.credentials;
 
     co (function *() {
       const options = {
