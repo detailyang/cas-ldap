@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T17:07:04+08:00
+* @Last modified time: 2016-03-17T17:14:44+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -26,186 +26,200 @@ winston.add(winston.transports.Syslog, {
 });
 winston.trace = () => {};
 //winston.remove(winston.transports.Console);
-
-const server = ldap.createServer({
-  log: winston,
-  certificate: fs.readFileSync(config.ssl.cert),
-  key: fs.readFileSync(config.ssl.key),
-});
 const headers = {
   authorization: `oauth ${config.cas.secret}`,
 };
 
-server.on('close', (err) => {
-  console.log('ldap server closed');
-});
 
-// admin password bind
-server.bind(config.dn.admin, (req, res, next) => {
-  req.log.info({
-    ip: req.connection.ldap.id,
-    type: 'admin bind',
-    version: req.version || '-1',
-    dn: req.dn.toString(),
-  });
-  if (req.version !== 3) {
-    return next(new ldap.ProtocolError(`${req.version} is not v3`));
-  }
-  if (req.credentials !== config.ldap.admin.password) {
-    return next(new ldap.InvalidCredentialsError(req.dn.toString()));
-  }
-  res.end();
-});
-
-// dynamic password bind
-server.bind(config.dn.dynamic, (req, res, next) => {
-  req.log.info({
-    ip: req.connection.ldap.id,
-    type: 'dynamic user bind',
-    version: req.version || '-1',
-    dn: req.dn.toString(),
-  });
-  try {
-    const id = req.dn.toString().split(',')[0].split('=')[1];
-  } catch (e) {
-    id = 0;
-  }
-  const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
-  const body = {};
-  body[field] = id;
-  body['password'] = req.credentials;
-  body['dynamic'] = true;
-
-  co(function *() {
-    const options = {
-      uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
-      method: config.cas.api.checkLogin.method,
-      body: body,
-      json: true,
-      headers: headers,
-    };
-    const resp = yield rp(options).catch(errors.RequestError, (reason) => {
+const createServer = (type) => {
+  const server = {};
+  if (type == 'tls') {
+    server = ldap.createServer({
+      log: winston,
+      certificate: fs.readFileSync(config.ssl.cert),
+      key: fs.readFileSync(config.ssl.key),
     });
-    if (!resp) {
-      next(new ldap.UnavailableError());
-      return res.end();
-    }
-    if (resp.code !== 0) {
-      next(new ldap.InvalidCredentialsError(resp.data.value));
-      return res.end();
-    }
-    return res.end();
-  })
-  .catch((err) => {
-    next(new ldap.UnavailableError(err.message));
-    return res.end();
-  })
-});
-
-// static password bind
-server.bind(config.dn.static, (req, res, next) => {
-  req.log.info({
-    ip: req.connection.ldap.id,
-    type: 'static user bind',
-    version: req.version || '-1',
-    dn: req.dn.toString(),
-  });
-  try {
-    const id = req.dn.toString().split(',')[0].split('=')[1];
-  } catch (e) {
-    id = 0;
-  }
-  const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
-  const body = {};
-  body[field] = id;
-  body['password'] = req.credentials;
-
-  co (function *() {
-    const options = {
-      uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
-      method: config.cas.api.checkLogin.method,
-      body: body,
-      json: true,
-      headers: headers,
-    };
-    const resp = yield rp(options).catch(errors.RequestError, (reason) => {
-      console.log(reason);
-      next(new ldap.UnavailableError(reason));
+    server.listen(config.ldap.tls.port, config.ldap.tls.host, () => {
+      console.log('cas-ldap listening at ' + server.url);
     });
-    if (!resp) {
-      return res.end();
-    }
-    if (resp.code !== 0) {
-      next(new ldap.InvalidCredentialsError(resp.data.value));
-      return res.end();
-    }
-    return res.end();
-  })
-  .catch((err) => {
-    next(new ldap.UnavailableError(err.message));
-    return res.end();
-  });
-});
-
-// static dynamic bind
-server.bind(config.dn.staticdynamic, (req, res, next) => {
-  req.log.info({
-    ip: req.connection.ldap.id,
-    type: 'static dynamic user bind',
-    version: req.version || '-1',
-    dn: req.dn.toString(),
-  });
-  try {
-    const id = req.dn.toString().split(',')[0].split('=')[1];
-  } catch (e) {
-    id = 0;
-  }
-  const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
-  const body = {};
-  body[field] = id;
-  body['staticdynamic'] = req.credentials;
-
-  co (function *() {
-    const options = {
-      uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
-      method: config.cas.api.checkLogin.method,
-      body: body,
-      json: true,
-      headers: headers,
-    };
-    const resp = yield rp(options).catch(errors.RequestError, (reason) => {
-      console.log(reason);
-      next(new ldap.UnavailableError(reason));
+  } else {
+    server = ldap.createServer({
+      log: winston,
     });
-    if (!resp) {
-      return res.end();
-    }
-    if (resp.code !== 0) {
-      next(new ldap.InvalidCredentialsError(resp.data.value));
-      return res.end();
-    }
-    return res.end();
-  })
-  .catch((err) => {
-    next(new ldap.UnavailableError(err.message));
-    return res.end();
+    server.listen(config.ldap.notls.port, config.ldap.notls.host, () => {
+      console.log('cas-ldap listening at ' + server.url);
+    });
+  }
+
+  server.on('close', (err) => {
+    console.log('ldap server closed');
   });
-});
 
-const search = require('./search');
-// allow search '' to get the tree
-server.search('', search.tree);
-server.search(config.ldap.base, search.tree);
-server.search(config.dn.staticdynamic, search.user.staticdynamic);
-server.search(config.dn.dynamic, search.user.dynamic);
-server.search(config.dn.staitcdynamic, search.user.staitcdynamic);
-server.search(config.dn.staitcdynamic, search.user.dynamic);
-server.search(config.dn.static, search.user.static);
+  // admin password bind
+  server.bind(config.dn.admin, (req, res, next) => {
+    req.log.info({
+      ip: req.connection.ldap.id,
+      type: 'admin bind',
+      version: req.version || '-1',
+      dn: req.dn.toString(),
+    });
+    if (req.version !== 3) {
+      return next(new ldap.ProtocolError(`${req.version} is not v3`));
+    }
+    if (req.credentials !== config.ldap.admin.password) {
+      return next(new ldap.InvalidCredentialsError(req.dn.toString()));
+    }
+    res.end();
+  });
 
-server.unbind((req, res, next) => {
-  res.end();
-});
+  // dynamic password bind
+  server.bind(config.dn.dynamic, (req, res, next) => {
+    req.log.info({
+      ip: req.connection.ldap.id,
+      type: 'dynamic user bind',
+      version: req.version || '-1',
+      dn: req.dn.toString(),
+    });
+    try {
+      const id = req.dn.toString().split(',')[0].split('=')[1];
+    } catch (e) {
+      id = 0;
+    }
+    const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
+    const body = {};
+    body[field] = id;
+    body['password'] = req.credentials;
+    body['dynamic'] = true;
 
-server.listen(config.ldap.port, config.ldap.host, () => {
-  console.log('cas-ldap listening at ' + server.url);
-});
+    co(function *() {
+      const options = {
+        uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
+        method: config.cas.api.checkLogin.method,
+        body: body,
+        json: true,
+        headers: headers,
+      };
+      const resp = yield rp(options).catch(errors.RequestError, (reason) => {
+      });
+      if (!resp) {
+        next(new ldap.UnavailableError());
+        return res.end();
+      }
+      if (resp.code !== 0) {
+        next(new ldap.InvalidCredentialsError(resp.data.value));
+        return res.end();
+      }
+      return res.end();
+    })
+    .catch((err) => {
+      next(new ldap.UnavailableError(err.message));
+      return res.end();
+    })
+  });
+
+  // static password bind
+  server.bind(config.dn.static, (req, res, next) => {
+    req.log.info({
+      ip: req.connection.ldap.id,
+      type: 'static user bind',
+      version: req.version || '-1',
+      dn: req.dn.toString(),
+    });
+    try {
+      const id = req.dn.toString().split(',')[0].split('=')[1];
+    } catch (e) {
+      id = 0;
+    }
+    const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
+    const body = {};
+    body[field] = id;
+    body['password'] = req.credentials;
+
+    co (function *() {
+      const options = {
+        uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
+        method: config.cas.api.checkLogin.method,
+        body: body,
+        json: true,
+        headers: headers,
+      };
+      const resp = yield rp(options).catch(errors.RequestError, (reason) => {
+        console.log(reason);
+        next(new ldap.UnavailableError(reason));
+      });
+      if (!resp) {
+        return res.end();
+      }
+      if (resp.code !== 0) {
+        next(new ldap.InvalidCredentialsError(resp.data.value));
+        return res.end();
+      }
+      return res.end();
+    })
+    .catch((err) => {
+      next(new ldap.UnavailableError(err.message));
+      return res.end();
+    });
+  });
+
+  // static dynamic bind
+  server.bind(config.dn.staticdynamic, (req, res, next) => {
+    req.log.info({
+      ip: req.connection.ldap.id,
+      type: 'static dynamic user bind',
+      version: req.version || '-1',
+      dn: req.dn.toString(),
+    });
+    try {
+      const id = req.dn.toString().split(',')[0].split('=')[1];
+    } catch (e) {
+      id = 0;
+    }
+    const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
+    const body = {};
+    body[field] = id;
+    body['staticdynamic'] = req.credentials;
+
+    co (function *() {
+      const options = {
+        uri: `${config.cas.domain}${config.cas.api.checkLogin.endpoint}`,
+        method: config.cas.api.checkLogin.method,
+        body: body,
+        json: true,
+        headers: headers,
+      };
+      const resp = yield rp(options).catch(errors.RequestError, (reason) => {
+        console.log(reason);
+        next(new ldap.UnavailableError(reason));
+      });
+      if (!resp) {
+        return res.end();
+      }
+      if (resp.code !== 0) {
+        next(new ldap.InvalidCredentialsError(resp.data.value));
+        return res.end();
+      }
+      return res.end();
+    })
+    .catch((err) => {
+      next(new ldap.UnavailableError(err.message));
+      return res.end();
+    });
+  });
+
+  const search = require('./search');
+
+  // allow search '' to get the tree
+  server.search('', search.tree);
+  server.search(config.ldap.base, search.tree);
+  server.search(config.dn.staticdynamic, search.user.staticdynamic);
+  server.search(config.dn.dynamic, search.user.dynamic);
+  server.search(config.dn.static, search.user.static);
+
+  server.unbind((req, res, next) => {
+    res.end();
+  });
+};
+
+createServer('tls');
+createServer('notls');
