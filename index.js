@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T17:14:44+08:00
+* @Last modified time: 2016-03-17T17:28:50+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -31,10 +31,9 @@ const headers = {
 };
 
 
-const createServer = (type) => {
-  const server = {};
+const createLDAP = (type) => {
   if (type == 'tls') {
-    server = ldap.createServer({
+    var server = ldap.createServer({
       log: winston,
       certificate: fs.readFileSync(config.ssl.cert),
       key: fs.readFileSync(config.ssl.key),
@@ -42,15 +41,23 @@ const createServer = (type) => {
     server.listen(config.ldap.tls.port, config.ldap.tls.host, () => {
       console.log('cas-ldap listening at ' + server.url);
     });
+    return server;
   } else {
-    server = ldap.createServer({
+    var server = ldap.createServer({
       log: winston,
     });
     server.listen(config.ldap.notls.port, config.ldap.notls.host, () => {
       console.log('cas-ldap listening at ' + server.url);
     });
+    return server;
   }
 
+};
+
+server = createLDAP('tls');
+server = createLDAP('notls');
+
+createServer = (server) => {
   server.on('close', (err) => {
     console.log('ldap server closed');
   });
@@ -219,7 +226,4 @@ const createServer = (type) => {
   server.unbind((req, res, next) => {
     res.end();
   });
-};
-
-createServer('tls');
-createServer('notls');
+}

@@ -2,7 +2,7 @@
  * @Author: detailyang
  * @Date:   2015-03-01 20:34:37
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T17:01:02+08:00
+* @Last modified time: 2016-03-17T17:19:27+08:00
  */
 
 
@@ -41,8 +41,14 @@ config.ssl = {
 
 if (process.env.NODE_ENV === 'dev') {
   config.ldap = {
-    port: 389,
-    host: '0.0.0.0',
+    tls: {
+      port: 636,
+      host: '0.0.0.0',
+    },
+    notls: {
+      port: 389,
+      host: '0.0.0.0',
+    },
     base: 'dc=cas,dc=com',
     admin: {
       username: 'root',
@@ -68,8 +74,14 @@ if (process.env.NODE_ENV === 'dev') {
     dynamic: 'abababaaaaa',
   };
   config.ldap = {
-    port: 1636,
-    host: '127.0.0.1',
+    tls: {
+      port: 1636,
+      host: '0.0.0.0',
+    },
+    notls: {
+      port: 389,
+      host: '0.0.0.0',
+    },
     base: 'dc=cas,dc=com',
     admin: {
       username: 'root',
@@ -83,8 +95,14 @@ if (process.env.NODE_ENV === 'dev') {
   config.cas.secret = 'ebc4a530-e87c-11e5-8fb6-6fd23b62767f';
 } else {
   config.ldap = {
-    port: process.env.CAS_LDAP_LDAP_PORT,
-    host: process.env.CAS_LDAP_LDAP_HOST,
+    tls: {
+      port: process.env.CAS_LDAP_LDAP_TLS_PORT,
+      host: process.env.CAS_LDAP_LDAP_TLS_HOST,
+    },
+    notls: {
+      port: process.env.CAS_LDAP_LDAP_NOTLS_PORT,
+      host: process.env.CAS_LDAP_LDAP_NOTLS_HOST,
+    },
     base: process.env.CAS_LDAP_LDAP_BASE,
     admin: {
       username: process.env.CAS_LDAP_ADMIN_USERNAME,
