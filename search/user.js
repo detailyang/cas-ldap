@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T17:03:54+08:00
+* @Last modified time: 2016-03-17T17:07:49+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -82,5 +82,5 @@ const search = (type) => {
 module.exports = {
   static: search('static'),
   dynamic: search('dynamic'),
-  staitcdynamic: search('staticdynamic'),
+  staticdynamic: search('staticdynamic'),
 };
