@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T21:08:55+08:00
+* @Last modified time: 2016-03-17T21:33:12+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -46,7 +46,7 @@ const search = (type) => {
         headers: headers,
       };
       const resp = yield rp(options).catch(errors.RequestError, (reason) => {
-        //should log
+        console.log(reason);
       });
       if (!resp) {
         next(new ldap.UnavailableError());
