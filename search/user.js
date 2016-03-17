@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-16T16:41:08+08:00
+* @Last modified time: 2016-03-17T17:01:12+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -57,6 +57,14 @@ const search = (type) => {
         return res.end();
       }
       const user = resp.data.value;
+      let basedn = config.dn.static;
+      if (type == 'static') {
+        dn = config.dn.static;
+      } else if (type == 'dynamic') {
+        dn = config.dn.dynamic;
+      } else if (type == 'staticdynamic'){
+        dn = config.dn.staticdynamic;
+      }
       res.send({
         dn: type == 'static'
           ? `dc=${user.username},${config.dn.static}`
@@ -74,4 +82,5 @@ const search = (type) => {
 module.exports = {
   static: search('static'),
   dynamic: search('dynamic'),
+  staitcdynamic: search('staticdynamic'),
 };
