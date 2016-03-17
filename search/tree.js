@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-15T13:37:07+08:00
+* @Last modified time: 2016-03-17T16:41:18+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -33,7 +33,7 @@ const search = (req, res, next) => {
           "structuralobjectclass": "OpenLDAProotDSE",
           "configcontext": "cn=config",
           "monitorcontext": "cn=Monitor",
-          "namingcontexts": config.dn.dynamic,
+          "namingcontexts": config.dn.tree,
           "supportedcontrol": ["2.16.840.1.113730.3.4.18","2.16.840.1.113730.3.4.2",
                                "1.3.6.1.4.1.4203.1.10.1","1.2.840.113556.1.4.319","1.2.826.0.1.3344810.2.3","1.3.6.1.1.13.2","1.3.6.1.1.13.1","1.3.6.1.1.12"],
           "supportedextension": ["1.3.6.1.4.1.1466.20037","1.3.6.1.4.1.4203.1.11.1","1.3.6.1.4.1.4203.1.11.3","1.3.6.1.1.8"
@@ -46,6 +46,16 @@ const search = (req, res, next) => {
       });
       break;
     case 'sub':
+      break;
+    case 'one':
+      res.send({
+        dn: config.dn.static,
+        attributes: {
+          username: 'black',
+          id: 1,
+          mobile: 18868825212,
+        },
+      });
       break;
   default:
       break

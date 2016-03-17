@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-16T16:48:34+08:00
+* @Last modified time: 2016-03-17T16:41:44+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -196,6 +196,7 @@ const search = require('./search');
 // allow search '' to get the tree
 server.search('', search.tree);
 server.search(config.ldap.base, search.tree);
+server.search(config.dn.tree, search.tree);
 server.search(config.dn.static, search.user.static);
 
 server.unbind((req, res, next) => {

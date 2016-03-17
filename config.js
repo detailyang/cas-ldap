@@ -2,7 +2,7 @@
  * @Author: detailyang
  * @Date:   2015-03-01 20:34:37
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-16T16:42:09+08:00
+* @Last modified time: 2016-03-17T16:38:54+08:00
  */
 
 
@@ -102,5 +102,6 @@ config.dn = {
   static: `dc=${config.ldap.user.username},${config.ldap.base}`,
   dynamic:  `dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
   staticdynamic: `dc=staticdynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
+  dynamic:  `dc=tree,dc=${config.ldap.user.username},${config.ldap.base}`,
   admin: `dc=${config.ldap.admin.username},${config.ldap.base}`,
 };
