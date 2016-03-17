@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T16:41:18+08:00
+* @Last modified time: 2016-03-17T17:03:35+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -48,14 +48,7 @@ const search = (req, res, next) => {
     case 'sub':
       break;
     case 'one':
-      res.send({
-        dn: config.dn.static,
-        attributes: {
-          username: 'black',
-          id: 1,
-          mobile: 18868825212,
-        },
-      });
+      // do not import any user to client, let client to authorize cas-ldap:)
       break;
   default:
       break

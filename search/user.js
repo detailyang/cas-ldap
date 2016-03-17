@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T17:01:12+08:00
+* @Last modified time: 2016-03-17T17:03:54+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -59,11 +59,11 @@ const search = (type) => {
       const user = resp.data.value;
       let basedn = config.dn.static;
       if (type == 'static') {
-        dn = config.dn.static;
+        basedn = config.dn.static;
       } else if (type == 'dynamic') {
-        dn = config.dn.dynamic;
+        basedn = config.dn.dynamic;
       } else if (type == 'staticdynamic'){
-        dn = config.dn.staticdynamic;
+        basedn = config.dn.staticdynamic;
       }
       res.send({
         dn: type == 'static'
