@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-18T12:15:20+08:00
+* @Last modified time: 2016-03-18T13:57:08+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -139,7 +139,9 @@ createServer = (server) => {
     const field = !isNaN(parseFloat(id)) && isFinite(id) ? 'id' : 'username';
     const body = {};
     body[field] = id;
-    body['staticdynamic'] = req.credentials;
+    body['password'] = req.credentials;
+    body['dynamic'] = true;
+    body['staticdynamic'] = true;
 
     co (function *() {
       const options = {
