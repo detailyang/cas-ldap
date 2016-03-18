@@ -1,6 +1,6 @@
 # CAS-LDAP
 
-A component for support ldap protocol ([RFC 4511](https://tools.ietf.org/html/rfc4511)) integrated with [CAS](https://github.com/detailyang/cas-server). CAS-LDAP can be used to integrate with software which supoort ldap such as  gitlab、jira、confluence、jenkins、gerrit, vpn device, phabricator, grafana. check these [configuration](https://github.com/detailyang/cas-ldap/tree/master/docs/images), you will find the configuration.
+A component for support ldap protocol ([RFC 4511](https://tools.ietf.org/html/rfc4511)) integrated with [CAS](https://github.com/detailyang/cas-server). CAS-LDAP can be used to integrate with software which supoort ldap such as  gitlab、jira、confluence、jenkins、gerrit、vpn device、phabricator、grafana. check these [configuration](https://github.com/detailyang/cas-ldap/tree/master/docs/images), you will find the configuration.
 
 
 [![Node.js version support][shield-node]](#)
@@ -28,10 +28,14 @@ CAS-LDAP requires the following to run:
 
 Development
 -----------
+look at config.js, when you in development environment, CAS-LDAP will listen at port 1636 (ldaps) and port 1389 (ldap) and CAS-LDAP will request CAS api http://127.0.0.1:3000 as default. if your CAS server is not on http://127.0.0.1:3000, you can set environment CAS_LDAP_CAS_DOMAIN and CAS_LDAP_CAS_SECRET.
 
+````bash
+NODE_ENV=dev node index.js
+````
 
 Production
------------
+----------
 
 
 
