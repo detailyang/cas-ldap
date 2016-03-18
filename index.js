@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-18T13:57:08+08:00
+* @Last modified time: 2016-03-18T14:09:58+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -30,7 +30,6 @@ const headers = {
   authorization: `oauth ${config.cas.secret}`,
 };
 
-
 const createLDAP = (type) => {
   if (type == 'tls') {
     var server = ldap.createServer({
@@ -52,9 +51,6 @@ const createLDAP = (type) => {
     return server;
   }
 };
-
-const server = createLDAP('tls');
-const servers = createLDAP('notls');
 
 createServer = (server) => {
   server.on('close', (err) => {
@@ -229,5 +225,7 @@ createServer = (server) => {
   });
 }
 
+const server = createLDAP('tls');
+const servers = createLDAP('notls');
 createServer(server);
 createServer(servers);

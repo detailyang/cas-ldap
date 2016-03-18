@@ -3,11 +3,12 @@
 * @Date:   2016-03-13T16:59:16+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T21:33:12+08:00
+* @Last modified time: 2016-03-18T15:51:39+08:00
 * @License: The MIT License (MIT)
 */
 
 
+'use strict'
 const config = require('../config');
 const rp = require('request-promise');
 const errors = require('request-promise/errors');
@@ -57,7 +58,7 @@ const search = (type) => {
         return res.end();
       }
       const user = resp.data.value;
-      const basedn = `dc=${user.username},${config.dn.static}`;
+      let basedn = `dc=${user.username},${config.dn.static}`;
       if (type == 'static') {
         basedn = `dc=${user.username},${config.dn.static}`;
       } else if (type == 'dynamic') {
