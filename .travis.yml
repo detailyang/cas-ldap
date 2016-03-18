@@ -10,7 +10,8 @@ addons:
     - gcc-4.9
 env:
   - NODE_ENV=test
-before_script:
+before_install
   - $CXX --version
+before_script:
   - node index.js &
   - node mock.js &
