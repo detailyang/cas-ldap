@@ -4,5 +4,6 @@ node_js:
 env:
   - NODE_ENV=test
 before_script:
+  - apt-get install -qq gcc
   - node index.js &
   - node mock.js &
