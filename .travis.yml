@@ -1,6 +1,8 @@
 language: node_js
+
 node_js:
   - "4.2"
+  
 addons:
   apt:
     sources:
@@ -8,10 +10,13 @@ addons:
     packages:
     - g++-4.9
     - gcc-4.9
+    
 env:
   - NODE_ENV=test
-before_install
+  
+before_install:
   - $CXX --version
+  
 before_script:
   - node index.js &
   - node mock.js &
