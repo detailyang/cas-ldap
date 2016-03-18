@@ -32,7 +32,24 @@ NODE_ENV=dev node index.js
 
 Production
 ----------
-
+For deploy node.js application, any process management like PM2、Forever、Supervisor is ok. Anyway, before startup CAS-LDAP, we must should set environment as follow:
+````bash
+export CAS_LDAP_LDAP_TLS_PORT=636
+export CAS_LDAP_LDAP_TLS_HOST=0.0.0.0
+export CAS_LDAP_LDAP_NOTLS_PORT=389
+export CAS_LDAP_LDAP_NOTLS_HOST=0.0.0.0
+export CAS_LDAP_LDAP_BASE=dc=example,dc=com
+export CAS_LDAP_ADMIN_USERNAME=root
+export CAS_LDAP_ADMIN_PASSWORD=123123123123123123
+export CAS_LDAP_CAS_DOMAIN=https://cas.example.com
+export CAS_LDAP_CAS_SECRET=36229359-9178-416f-a6f3-f9d9d5e0ddbe
+export CAS_LDAP_SYSLOG_HOSTNAME=10.10.0.3
+export CAS_LDAP_SYSLOG_PORT=514
+export CAS_LDAP_SYSLOG_FACILITY=local6
+export CAS_LDAP_SYSLOG_TAG='cas-ldap'
+export CAS_LDAP_LDAP_TLS_KEY=/opt/cas-ldap/etc/example.com.key
+export CAS_LDAP_LDAP_TLS_CERT=/opt/cas-ldap/etc/example.com.crt
+````
 
 
 Contributing
