@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T15:27:41+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-18T12:27:09+08:00
+* @Last modified time: 2016-03-18T12:32:02+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -14,7 +14,7 @@ const expect = require('chai').expect;
 
 const config = require('./config');
 const client = ldap.createClient({
-  url: `ldaps://${config.ldap.host}:${config.ldap.port}`
+  url: `ldaps://${config.ldap.tls.host}:${config.ldap.tls.port}`,
 });
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
