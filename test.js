@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T15:27:41+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-18T13:41:11+08:00
+* @Last modified time: 2016-03-19T03:28:30+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -83,6 +83,7 @@ describe('ldap static dynamic password id bind', function(){
   it('should return sucess', function(done){
     client.bind(`dc=${config.mock.id},dc=staticdynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
       config.mock.password+config.mock.dynamic, (err) => {
+        console.log(err);
         expect(err).to.be.null;
         done();
     });
