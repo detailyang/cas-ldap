@@ -1,6 +1,6 @@
 # CAS-LDAP
 
-A component for support ldap protocol ([RFC 4511](https://tools.ietf.org/html/rfc4511)) integrated with [CAS](https://github.com/detailyang/cas-server). CAS-LDAP can be used to integrate with software which supoort ldap such as  gitlab、jira、confluence、jenkins、gerrit, vpn device, phabricator, grafana. check these [configuration](https://github.com/detailyang/cas-ldap/tree/master/docs/images), you will find configuration.
+A component for support ldap protocol ([RFC 4511](https://tools.ietf.org/html/rfc4511)) integrated with [CAS](https://github.com/detailyang/cas-server). CAS-LDAP can be used to integrate with software which supoort ldap such as  gitlab、jira、confluence、jenkins、gerrit, vpn device, phabricator, grafana. check these [configuration](https://github.com/detailyang/cas-ldap/tree/master/docs/images), you will find the configuration.
 
 
 [![Node.js version support][shield-node]](#)
@@ -11,7 +11,8 @@ Table of Contents
 -----------------
 
   * [Requirements](#requirements)
-  * [Usage](#usage)
+  * [Development](#development)
+  * [Production](#production)
   * [Contributing](#contributing)
   * [License](#license)
 
@@ -25,8 +26,13 @@ CAS-LDAP requires the following to run:
 [CAS][cas] (personally recommand latest release version)    
 
 
-Usage
------
+Development
+-----------
+
+
+Production
+-----------
+
 
 
 Contributing
@@ -34,14 +40,10 @@ Contributing
 
 
 
-
 License
 -------
 
 CAS-LDAP is licensed under the [MIT](#) license.  
-
-
-
 
 [node]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
