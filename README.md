@@ -1,4 +1,4 @@
-# CAS-LDAP [![Node.js version support][shield-node]](#)[![Build status][build]](#)[![MIT licensed][shield-license]](#)
+# CAS-LDAP [![Node.js version support][shield-node]][![Build status][build]][![MIT licensed][shield-license]]
 
 A component for support ldap protocol ([RFC 4511](https://tools.ietf.org/html/rfc4511)) integrated with [CAS](https://github.com/detailyang/cas-server). CAS-LDAP can be used to integrate with software which supoort ldap such as  gitlab、jira、confluence、jenkins、gerrit、vpn device、phabricator、grafana. check these [configuration](https://github.com/detailyang/cas-ldap/tree/master/docs/images), you will find the configuration.
 
