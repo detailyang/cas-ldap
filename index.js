@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T14:36:24+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-17T21:09:25+08:00
+* @Last modified time: 2016-03-18T12:15:20+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -51,7 +51,6 @@ const createLDAP = (type) => {
     });
     return server;
   }
-
 };
 
 const server = createLDAP('tls');

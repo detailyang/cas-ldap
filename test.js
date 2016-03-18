@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T15:27:41+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-16T16:19:49+08:00
+* @Last modified time: 2016-03-18T12:27:09+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -80,7 +80,7 @@ describe('ldap search user', function() {
       expect(err).to.be.null;
       res.on('searchEntry', function(entry) {
         const user = entry.object;
-        expect(user.id).to.equal('1');
+        expect(user.id).to.equal(config.mock.id);
       });
       res.on('error', function(err) {
         expect(err).to.be.null;
