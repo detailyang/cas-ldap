@@ -2,7 +2,7 @@
  * @Author: detailyang
  * @Date:   2015-03-01 20:34:37
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-18T12:18:20+08:00
+* @Last modified time: 2016-03-19T01:39:26+08:00
  */
 
 
@@ -17,10 +17,6 @@ config.cas = {
       endpoint: '/oauth/users/login',
     },
     getUser: {
-      method: 'GET',
-      endpoint: '/oauth/users/one',
-    },
-    filterUser: {
       method: 'GET',
       endpoint: '/oauth/users/one',
     },
@@ -42,11 +38,11 @@ config.ssl = {
 if (process.env.NODE_ENV === 'dev') {
   config.ldap = {
     tls: {
-      port: 636,
+      port: 1636,
       host: '0.0.0.0',
     },
     notls: {
-      port: 389,
+      port: 1389,
       host: '0.0.0.0',
     },
     base: 'dc=cas,dc=com',
@@ -79,7 +75,7 @@ if (process.env.NODE_ENV === 'dev') {
       host: '0.0.0.0',
     },
     notls: {
-      port: 389,
+      port: 1389,
       host: '0.0.0.0',
     },
     base: 'dc=cas,dc=com',
@@ -120,6 +116,5 @@ config.dn = {
   static: `dc=${config.ldap.user.username},${config.ldap.base}`,
   dynamic:  `dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
   staticdynamic: `dc=staticdynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
-  tree:  `dc=tree,dc=${config.ldap.user.username},${config.ldap.base}`,
   admin: `dc=${config.ldap.admin.username},${config.ldap.base}`,
 };
