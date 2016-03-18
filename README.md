@@ -2,7 +2,6 @@
 
 A component for support ldap ([RFC 4511](https://tools.ietf.org/html/rfc4511)) integrated with [CAS](https://github.com/detailyang/cas-server)
 
-A small library for padding strings in JavaScript. Marmalade-free.
 
 [![NPM version][shield-npm]](#)
 [![Node.js version support][shield-node]](#)
