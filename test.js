@@ -3,7 +3,7 @@
 * @Date:   2016-03-13T15:27:41+08:00
 * @Email:  detailyang@gmail.com
 * @Last modified by:   detailyang
-* @Last modified time: 2016-03-18T12:32:02+08:00
+* @Last modified time: 2016-03-18T13:41:11+08:00
 * @License: The MIT License (MIT)
 */
 
@@ -63,6 +63,26 @@ describe('ldap dynamic password id bind', function(){
   it('should return sucess', function(done){
     client.bind(`dc=${config.mock.id},dc=dynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
       config.mock.dynamic, (err) => {
+        expect(err).to.be.null;
+        done();
+    });
+  });
+});
+
+describe('ldap static dynamic password username bind', function(){
+  it('should return sucess', function(done){
+    client.bind(`dc=${config.mock.username},dc=staticdynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
+      config.mock.password+config.mock.dynamic, (err) => {
+        expect(err).to.be.null;
+        done();
+    });
+  });
+});
+
+describe('ldap static dynamic password id bind', function(){
+  it('should return sucess', function(done){
+    client.bind(`dc=${config.mock.id},dc=staticdynamic,dc=${config.ldap.user.username},${config.ldap.base}`,
+      config.mock.password+config.mock.dynamic, (err) => {
         expect(err).to.be.null;
         done();
     });
