@@ -98,7 +98,7 @@ config.mock = {
 
 Once ready for monitor.js, run the command periodically as follow:
 ````bash
-NODEE_ENV=production node_modules/mocha/bin/mocha monitor.js
+NODE_ENV=production node_modules/mocha/bin/mocha monitor.js
 ````
 
 Contributing
