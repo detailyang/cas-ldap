@@ -23,3 +23,11 @@ before_install:
 before_script:
   - node index.js &
   - node mock.js &
+
+deploy:
+  provider: releases
+  api_key: $CI_USER_TOKEN
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
