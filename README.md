@@ -8,6 +8,7 @@ Table of Contents
 
   * [Requirements](#requirements)
   * [Development](#development)
+  * [Test](#test)
   * [Production](#production)
   * [Contributing](#contributing)
   * [License](#license)
@@ -24,10 +25,33 @@ CAS-LDAP requires the following to run:
 
 Development
 -----------
-look at config.js, when you in development environment, CAS-LDAP will listen at port 1636 (ldaps) and port 1389 (ldap) and CAS-LDAP will request CAS api http://127.0.0.1:3000 as default. if your CAS server is not on http://127.0.0.1:3000, you can set environment CAS_LDAP_CAS_DOMAIN and CAS_LDAP_CAS_SECRET.
+looking at config.js, CAS-LDAP will listen at port 1636 (ldaps) and port 1389 (ldap) and CAS-LDAP will request CAS api http://127.0.0.1:3000 as default. if your CAS server is not on http://127.0.0.1:3000, you can set environment CAS_LDAP_CAS_DOMAIN and CAS_LDAP_CAS_SECRET.
 
 ````bash
+npm install
 NODE_ENV=dev node index.js
+````
+
+Test
+------------
+CAS-LDAP provides eight ways api as follow:
+ 1. admin password bind
+ 2. static password username bind
+ 3. static password id bind
+ 4. dynamic password username bind
+ 5. dynamic password id bind
+ 6. static dynamic password username bind
+ 7. static dynamic password id bind
+ 8. search user
+  
+For sure these core api is ok, please pass tests when change code.
+
+````bash
+NODE_ENV=test node index.js
+NODE_ENV=test node mock.js # a mock server for cas
+
+# make sure above two process run in background
+NODE_ENV=test node_modules/mocha/bin/mocha test.js
 ````
 
 Production
@@ -51,10 +75,35 @@ export CAS_LDAP_LDAP_TLS_KEY=/opt/cas-ldap/etc/example.com.key
 export CAS_LDAP_LDAP_TLS_CERT=/opt/cas-ldap/etc/example.com.crt
 ````
 
+By the way, to monitor the CAS-LDAP and CAS status, periodically run real test is necessary. Personally recommand to checkout monitor.js and create the user 'monitor' on CAS server.
+````
+config.mock = {
+  username: 'monitor',
+  password: 'monitor_MM',
+  id: '466',
+  gender: 0,
+  realname: 'monitor',
+  aliasname: 'monitor',
+  mobile: '1234567890',
+  email: 'monitor@example.com',
+  key: '',
+  dynamic: (()=>{
+    const key = password.decodeGoogleSecret('EQZGCJBRGASGU422GBXW4ZLDJVXEQT3FJNKWMUSHHFAVSZLWIRWTQWKVKBVHS3DYOY3GM5LBKEZTKNDPORFTASRVOFTVC2LN');
+    const otpcode = password.otpgen(key);
+
+    return otpcode;
+  })(),
+};
+````
+
+Once ready for monitor.js, run the command periodically as follow:
+````bash
+NODEE_ENV=production node_modules/mocha/bin/mocha monitor.js
+````
 
 Contributing
 ------------
-To contribute to CAS-LDAP, clone this repo locally and commit your code on a separate branch.
+To contribute to CAS-LDAP, clone this repo locally and commit your code on a separate branch then send a pull request.
 
 
 License
